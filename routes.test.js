@@ -7,7 +7,7 @@ const {
     createTnstructor,
     fetchStudents,
     fetchInstructors,
-    } = require('./server/db');
+    } = require('./server/db/db.js');
 jest.mock('./server/index.js');
 
 test
@@ -32,7 +32,7 @@ test('fetches all instructors', async () => {
 });
 
 test('fetches all Studentss', async () => {
-    const Students = [{
+    const students = [{
         /* id: 1, */
         name: 'Roy Mustang',
         cohort: '2405',
