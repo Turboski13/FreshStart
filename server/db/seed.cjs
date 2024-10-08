@@ -100,7 +100,7 @@ console.error(err);
         await createStudent("Miney Mouse", "WDI-1", 2);
         console.log("Database seeded.");
         await client.end();
-        console.log("Connection closed.");     */
+        console.log("Connection closed.");  
     }    
 
 seedDb();
