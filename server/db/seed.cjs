@@ -7,7 +7,7 @@ const bcrypt = require('bcrypt');
 const seed = async () => {
    /* const createTables = async () => { */
   console.log("Seeding the database.");
-  try {
+  /* try { */
       // Clear the database.
       await client.query("DROP TABLE IF EXISTS student, instructor;"); 
       console.log("Tables dropped.");
@@ -30,7 +30,7 @@ const seed = async () => {
         console.log("Tables created.");        
     
 
-    /* const createInstructor = async(username, password)=> {
+    const createInstructor = async(username, password)=> {
         const encryptedPassword = await bcrypt.hash(password, 5);
         const result = await client.query(`
             INSERT INTO instructor (username, password)
@@ -40,10 +40,10 @@ const seed = async () => {
 
         console.log("Instructors created.");
         return result.rows[0];
-      } */
+      } 
 
 // Add 5 instructors.
-await Promise.all(
+/* await Promise.all(
   [...Array(5)].map(() =>
     prisma.instructor.create({
       data: {
@@ -54,9 +54,9 @@ await Promise.all(
       console.log("Instructors created.");
     }) )
 ); 
+ */
 
-
-      /* const createStudent = async(name, cohort, instructorId)=> {
+  const createStudent = async(name, cohort, instructorId)=> {
         const result = await client.query(`
             INSERT INTO student (name, cohort, instructorId)
             VALUES ($1, $2, $3)
@@ -66,11 +66,11 @@ await Promise.all(
         console.log("Students created.");
         return result.rows[0];
       
-      } */
+      } 
 
 
 // Add 4 students for each instructor.
-await Promise.all(
+/* await Promise.all(
   [...Array(20)].map((_, i) =>
     prisma.student.create({
       data: {
@@ -81,16 +81,16 @@ await Promise.all(
       },
     })
   )
-); 
+);  */
 
-console.log("Database is seeded.");
+/* console.log("Database is seeded.");
 } catch (err) {
 console.error(err);
-}}
+}} */
 
 
 
-   /*  const seedDb = async () => {
+   const seedDb = async () => {
         await client.connect();
         await createTables();
         await createInstructor("instructor1", "password1");
@@ -108,5 +108,4 @@ seedDb();
 
 seed();
 
-//don't want to export seed file
-
+//don't want to export seed file maybe
