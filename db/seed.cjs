@@ -1,8 +1,6 @@
 // Clear and repopulate the database.
 require("dotenv").config();
-const client = require('../client/client');
-const { faker } = require("@faker-js/faker");
-const uuid = require('uuid');
+const client = require('../client/client.cjs');
 const bcrypt = require('bcrypt');
 
 
@@ -33,28 +31,39 @@ const seed = async () => {
     }
 
     const createInstructor = async(username, password)=> {
-        const SQL = `
-          INSERT INTO instructor(username, password) VALUES($1, $2) RETURNING *
-        `;
-        const response = await client.query(SQL, [username, await bcrypt.hash(password, 5)]);
+        const encryptedPassword = await bcrypt.hash(password, 5);
+        const result = await client.query(`
+            INSERT INTO instructor (username, password)
+            VALUES ($1, $2)
+            RETURNING *;
+            `, [username, encryptedPassword]);
+
         console.log("Instructors created.");
-        return response.rows[0];
+        return result.rows[0];
       }
 
       const createStudent = async(name, cohort, instructorId)=> {
-        const SQL = `
-          INSERT INTO student(name, cohort, instructorId) VALUES($1, $2, $3) RETURNING *
-        `;
-        const response = await client.query(SQL, [name, cohort, instructorId]);
+        const result = await client.query(`
+            INSERT INTO student (name, cohort, instructorId)
+            VALUES ($1, $2, $3)
+            RETURNING *;
+            `, [name, cohort, instructorId]);
+        
         console.log("Students created.");
-        return response.rows[0];
+        return result.rows[0];
       
       }
     const seedDb = async () => {
-        createTables();
-        createInstructor();
-        createStudent();
-        console.log("Database seeded.");    
+        await client.connect();
+        await createTables();
+        await createInstructor("instructor1", "password1");
+        await createInstructor("instructor2", "password2");
+        await createInstructor("instructor3", "password3");
+        await createStudent("Mickey Mouse", "WDI-1", 1);
+        await createStudent("Miney Mouse", "WDI-1", 2);
+        console.log("Database seeded.");
+        await client.end();
+        console.log("Connection closed.");    
     }    
 
 seedDb();
@@ -62,10 +71,4 @@ seedDb();
 
 seed();
 
-
-
-module.exports = {
-    createTables,
-    createInstructor,
-    createStudent
-};
+//don't want to export seed file
